@@ -2,7 +2,21 @@ class ArticlesController < ApplicationController
   http_basic_authenticate_with name: "park", password: "park", except: [:index, :show]
 
   def index
-    @articles = Article.all
+    @articles = Article.select("id,title,text")
+                   .by_title(params[:title])
+    # .by_text(params[:text])
+
+    # render json: {
+    # articles: articles
+    # }
+    # render :json => @article
+  end
+
+  def list
+    # @articles = Article.where('title' => 'oooooo')
+    @articles = Article
+                    .by_title(params[:title])
+                    .by_text_not_blank(params[:text])
   end
 
   def show
