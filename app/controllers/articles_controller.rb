@@ -3,7 +3,7 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.select("id,title,text")
-                   .by_title(params[:title])
+                    .by_title(params[:title])
     # .by_text(params[:text])
 
     # render json: {
@@ -14,9 +14,14 @@ class ArticlesController < ApplicationController
 
   def list
     # @articles = Article.where('title' => 'oooooo')
-    @articles = Article
-                    .by_title(params[:title])
-                    .by_text_not_blank(params[:text])
+    articles = Article
+                   .by_title(params[:title])
+                   .by_text_not_blank(params[:text])
+    article_list = []
+    articles.each do |article|
+      article_list << {:key => article.id, :value => article.title}
+    end
+    render json: {article_list: article_list}
   end
 
   def show
